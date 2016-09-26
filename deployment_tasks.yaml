@@ -1,0 +1,47 @@
+#
+# Copyright (c) 2016 Tesora Inc.  All Rights Reserved.
+#
+# All use, reproduction, transfer, publication or disclosure is prohibited
+# except as may be expressly permitted in the applicable license agreement.
+#
+
+- id: ordering-plugin-role
+  type: group
+  role: [ordering-plugin-role]
+  requires: [deploy_start]
+  required_for: [deploy_end]
+  tasks:
+    - fuel_pkgs
+    - hiera
+    - globals
+    - logging
+    - tools
+    - netconfig
+    - hosts
+    - ssl-dns-setup
+    - ssl-keys-saving
+    - ssl-add-trust-chain
+    - firewall
+  parameters:
+    strategy:
+      type: parallel
+
+- id: ordering-plugin-controllernode-task
+  type: puppet
+  groups: [primary-controller, controller]
+  requires: [deploy_start]
+  required_for: [deploy_end]
+  parameters:
+    puppet_manifest: puppet/manifests/task_a.pp
+    puppet_modules: puppet/modules:/etc/puppet/modules
+    timeout: 1800
+
+- id: ordering-plugin-othernode-task
+  type: puppet
+  groups: [ordering-plugin-role]
+  requires: [ordering-plugin-controllernode-task]
+  required_for: [deploy_end]
+  parameters:
+    puppet_manifest: puppet/manifests/task_b.pp
+    puppet_modules: puppet/modules:/etc/puppet/modules
+    timeout: 1800

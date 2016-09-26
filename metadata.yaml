@@ -1,0 +1,21 @@
+name: fuel-plugin-ordering-bug
+title: demo plugin to figure out bug
+version: '3.1.2'
+description: World's worst fuel plugin
+fuel_version: ['9.0']
+licenses: ['Apache License Version 2.0']
+authors: ['Tesora, Inc.']
+homepage: 'http://www.tesora.com'
+groups: []
+is_hotpluggable: false
+
+# The plugin is compatible with releases in the list
+releases:
+  - os: ubuntu
+    version: mitaka-9.0
+    mode: ['ha']
+    deployment_scripts_path: deployment_scripts/
+    repository_path: repositories/ubuntu
+
+# Version of plugin package
+package_version: '4.0.0'
